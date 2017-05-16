@@ -1,5 +1,6 @@
 package com.emanuelsb.lucas.basiccalculator;
 
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.*;
@@ -12,10 +13,6 @@ public class basic_calculator extends AppCompatActivity{
     private EditText campoOperando2;
 
     private Button calcular;
-
-    private TextView resultado;
-
-    private RadioGroup operacoes;
 
     private RadioButton soma;
 
@@ -33,8 +30,6 @@ public class basic_calculator extends AppCompatActivity{
         campoOperando1 = (EditText)findViewById(R.id.campoOperando1);
         campoOperando2 = (EditText)findViewById(R.id.campoOperando2);
 
-        resultado = (TextView)findViewById(R.id.resultado);
-
         soma = (RadioButton)findViewById(R.id.soma);
         sub = (RadioButton)findViewById(R.id.sub);
         divi = (RadioButton)findViewById(R.id.divi);
@@ -46,38 +41,47 @@ public class basic_calculator extends AppCompatActivity{
             @Override
             public void onClick(View v) {
 
-                double valor1 = Double.parseDouble(campoOperando1.getText().toString());
-                double valor2 = Double.parseDouble(campoOperando2.getText().toString());
-                double resposta = 0;
-            /*
-                if ("".equals(campoOperando1.getText()))
-                    Toast.makeText(this.getApplicationContext(), "Nenhum número encontrado no operando 1!", Toast.LENGTH_SHORT);
-                if ("".equals(campoOperando1.getText())) {
-                    Toast.makeText(this.getApplicationContext(), "Nenhum número encontrado no operando 2!", Toast.LENGTH_SHORT);
-                } else if (Double.parseDouble(campoOperando2.getText().toString()) == 0) {
-                    Toast.makeText(this.getApplicationContext(), "Impossível dividir por zero!", Toast.LENGTH_SHORT);
+                if (campoOperando1.length() == 0){
+                    Toast.makeText(getApplicationContext(), "Campo do operando 1 vazio",Toast.LENGTH_SHORT).show();
                 }
-            */
+                else if (campoOperando1.length() == 0) {
+                    Toast.makeText(getApplicationContext(), "Campo do operando 2 vazio",Toast.LENGTH_SHORT).show();
 
-                if (operacoes.isEnabled()) {
+                } else if (Double.parseDouble(campoOperando2.getText().toString()) == 0) {
+                    AlertDialog.Builder alerta = new AlertDialog.Builder(basic_calculator.this);
+                    alerta.setTitle("Erro");
+                    alerta.setIcon(R.drawable.error);
+                    alerta.setMessage("Impossível dividir por 0");
+                    alerta.show();
+                } else {
 
-                    if (soma.isChecked())
-                        resposta = valor1 + valor2;
+                    double valor1 = Double.parseDouble(campoOperando1.getText().toString());
+                    double valor2 = Double.parseDouble(campoOperando2.getText().toString());
 
-                    if (sub.isChecked())
-                        resposta = valor1 - valor2;
+                    if (soma.isChecked()) {
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(basic_calculator.this);
+                        alerta.setTitle("Resposta: ");
+                        alerta.setMessage(Double.toString(valor1 + valor2));
+                        alerta.show();
+                    } else if (sub.isChecked()) {
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(basic_calculator.this);
+                        alerta.setTitle("Resposta: ");
+                        alerta.setMessage(Double.toString(valor1 - valor2));
+                        alerta.show();
+                    } else if (multi.isChecked()) {
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(basic_calculator.this);
+                        alerta.setTitle("Resposta: ");
+                        alerta.setMessage(Double.toString(valor1 * valor2));
+                        alerta.show();
+                    } else if (divi.isChecked()) {
+                        AlertDialog.Builder alerta = new AlertDialog.Builder(basic_calculator.this);
+                        alerta.setTitle("Resposta: ");
+                        alerta.setMessage(Double.toString(valor1 / valor2));
+                        alerta.show();
+                    } else {
+                        Toast.makeText(getApplicationContext(), "Nenhuma operação foi selecionada", Toast.LENGTH_SHORT).show();
 
-                    if (multi.isChecked())
-                        resposta = valor1 * valor2;
-
-                    if (divi.isChecked())
-                        resposta = valor1 / valor2;
-
-                    if(resultado.getText().toString().equals(""))
-                    resultado.setText(resultado.getText() + " " + Double.toString(resposta));
-
-                else{
-                    //Toast.makeText(this.getApplicationContext(), "Nenhuma operacão foi selecionada!", Toast.LENGTH_SHORT );
+                    }
                 }
 
             }
